@@ -1,6 +1,7 @@
 package jnpn.json;
 
 import java.util.*;
+import java.util.stream.*;
 import jdk.javadoc.doclet.*;
 import javax.lang.model.*;
 import javax.lang.model.element.*;
@@ -61,9 +62,21 @@ public class JSON implements Doclet {
 	    }
 	    // List<? extends Element> getEnclosedElements​()
 
-	    var v = new JVisitor(trees);
-	    v.visit(e);
-	    
+	    var v = new MVisitor(trees);
+	    var m = new HashMap<String,List<String>>();
+	    var r = v.visit(e, m);
+	    System.out.println("Doc Map:");
+	    System.out.println("-------");
+	    r.entrySet()
+		.stream()
+		.forEach((d) -> {
+			var dk = d.getKey();
+			var dv = d.getValue()
+			    .stream()
+			    .map((s) -> { return s.replace("\n", " . "); })
+			    .collect(Collectors.toList());
+			System.out.println(" - " + dk + ":" + dv + "\n");
+		    });
 	}
 
 	return true;
