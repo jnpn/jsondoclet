@@ -2,19 +2,19 @@
 #
 # https://www.codejava.net/java-core/tools/using-jar-command-examples
 
-pack:	build
+jar:	compile
 	jar -cfve jsondocletbis.jar jnpn.json.JVTest -C build jnpn/json
 
-run:	pack
+run:	jar
 	java -jar jsondocletbis.jar
 
 cleanbuild:
 	rm -v build/jnpn/json/*.class
 
-build:	hi
+compile:	hi
 	javac -cp build -d build src/jnpn/json/*
 
-buildv:
+compilev:	hi
 	javac -verbose -cp build -d build src/jnpn/json/*
 
 test:	build
@@ -23,5 +23,5 @@ test:	build
 hi:
 	echo "make:jsondoclet"
 
-doctest: pack
+doctest: jar
 	javadoc -cp jsondocletbis.jar -doclet jnpn.json.JSON -docletpath jsondocletbis.jar src/jnpn/json/*.java
