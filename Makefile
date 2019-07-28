@@ -1,4 +1,6 @@
 # jsondoclet-bis Makefile
+#
+# https://www.codejava.net/java-core/tools/using-jar-command-examples
 
 pack:	build
 	jar -cfve jsondocletbis.jar jnpn.json.JVTest -C build jnpn/json
@@ -20,3 +22,6 @@ test:	build
 
 hi:
 	echo "make:jsondoclet"
+
+doctest: pack
+	javadoc -cp jsondocletbis.jar -doclet jnpn.json.JSON -docletpath jsondocletbis.jar src/jnpn/json/*.java
