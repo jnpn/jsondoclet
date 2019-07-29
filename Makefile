@@ -2,26 +2,38 @@
 #
 # https://www.codejava.net/java-core/tools/using-jar-command-examples
 
-jar:	compile
-	jar -cfve jsondocletbis.jar jnpn.json.JVTest -C build jnpn/json
+PROJET=jsondocletbis
+VERSION=0.1a
+JARDIR=jars/
+BDIR=build
+SDIR=src
+PACKAGE=jnpn.json
+
+jar:	compile jardir
+	jar -cfve jars/$(PROJET)_$(VERSION).jar $(PACKAGE).JVTest -C $(BDIR) jnpn/json
+
+jardir:
+	mkdir -pv $(JARDIR)
 
 run:	jar
-	java -jar jsondocletbis.jar
+	java -jar $(JARDIR)$(PROJET)_$(VERSION).jar
 
 cleanbuild:
-	rm -v build/jnpn/json/*.class
+	rm -v $(BDIR)/jnpn/json/*.class
 
-compile:	hi
-	javac -cp build -d build src/jnpn/json/*
+compile:	prelude
+	javac -cp $(BDIR) -d $(BDIR) $(SDIR)/jnpn/json/*
 
-compilev:	hi
-	javac -verbose -cp build -d build src/jnpn/json/*
+compilev:	prelude
+	javac -verbose -cp $(BDIR) -d $(BDIR) $(SDIR)/jnpn/json/*
 
-test:	build
-	java -cp build jnpn.json.JVTest
+test:	compile
+	java -cp $(BDIR) $(PACKAGE).JVTest
 
-hi:
-	echo "make:jsondoclet"
+prelude:
+	@echo ""
+	@echo "make | jsondoclet (c) jnpn"
+	@echo ""
 
 doctest: jar
-	javadoc -cp jsondocletbis.jar -doclet jnpn.json.JSON -docletpath jsondocletbis.jar src/jnpn/json/*.java
+	javadoc -cp $(JARDIR)$(PROJET)_$(VERSION).jar -doclet $(PACKAGE).JSON -docletpath $(JARDIR)$(PROJET)_$(VERSION).jar $(SDIR)/jnpn/json/*.java
