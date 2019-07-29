@@ -65,19 +65,20 @@ public class JSON implements Doclet {
 	    var v = new MVisitor(trees);
 	    var m = new HashMap<String,List<String>>();
 	    var r = v.visit(e, m);
+	    var pre = "  --  ";
 	    System.out.println("Doc Map:");
 	    System.out.println("-------");
 	    r.entrySet()
 		.stream()
+		.filter((d) -> { return (d.getValue().size() > 0); })
 		.forEach((d) -> {
 			var dk = d.getKey();
 			var dv = d.getValue()
 			    .stream()
-			    .map((s) -> { return s.replace("\n", " . "); })
+			    .map((s) -> { return pre + s.replace("\n", "\n " + pre); })
 			    .collect(Collectors.toList());
-			System.out.println(" - " + dk + ":" + dv + "\n");
+			System.out.println(" - " + dk + " ::: Comment\n" + dv + "\n");
 		    });
-	}
 
 	return true;
     }
