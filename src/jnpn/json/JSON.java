@@ -2,6 +2,7 @@ package jnpn.json;
 
 import java.util.*;
 import java.util.stream.*;
+import java.util.function.*;
 import jdk.javadoc.doclet.*;
 import javax.lang.model.*;
 import javax.lang.model.element.*;
@@ -80,6 +81,28 @@ public class JSON implements Doclet {
 			System.out.println(" - " + dk + " ::: Comment\n" + dv + "\n");
 		    });
 
+	    // JSON output
+	    //  {
+	    //    comments: {
+	    //      "${qualName}" : "${comment},
+	    //      ...
+	    //    }
+	    //  }
+
+	    Function<String,String> wrapped = (s) -> { return "\"" + s + "\""; };
+	    // withOpenFile("fn", (file) -> {
+	    //	    file.writeln("{");
+	    //	    file.writeln("  comments: {");
+	    //	    r.entrySet()
+	    //		.stream()
+	    //		.forEach((d) -> {
+	    //			file.writeln("\"" + d.getKey() + "\"" + ":" + "\"" + d.getValue() + "\"");
+	    //		    });
+	    //	    file.writeln("  }");
+	    //	    file.writeln("}");
+	    //	});
+
+	}
 	return true;
     }
 
