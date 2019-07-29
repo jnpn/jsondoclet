@@ -18,6 +18,13 @@ class FileResource implements IResource<File> {
     }
 }
 
+/**
+ * mimicking python Contexts
+ * With <object> as <name>: <block>
+ * ==
+ * (<name> -> <block>.apply(<name>)).apply(<object>)
+ *
+ **/
 public class <R,T> With {
     private IResource<R> r;
     private Function<Resource<R>, T> f;
