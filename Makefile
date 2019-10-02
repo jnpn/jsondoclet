@@ -2,16 +2,24 @@
 #
 # https://www.codejava.net/java-core/tools/using-jar-command-examples
 
-JAR=jsondocletbis.jar
-JARS=jars/gson-2.8.5.jar:jars/jedis-3.1.0.jar:$(JAR):.
+VERSION=0.1b
+
+JAR=jsondocletbis_$(VERSION).jar
+LIB=libs
+LIBS=$(LIB)/gson-2.8.5.jar:$(LIB)/jedis-3.1.0.jar
+OUT=build
+CP=$(LIBS):$(JAR):.
+
+VERBOSE=-verbose
+
 TOP=src/jnpn/json
 SOURCE_DIRS=$(TOP)/testing/*.java $(TOP)/modelserializers/*.java $(TOP)/**/*.java
 
+DOCLET=jnpn.json.JSONDoclet
+TEST=jnpn.json.testing.Dummy
+
 jar:	compile
-	jar cfve $(JAR) jnpn.json.testing.Dummy -C build jnpn/json
-	# following line is the good idea
-	# but doesn't work
-	# updating the .jar manifest by hand to add class-path fix the bug
+	jar cfve $(JAR) jnpn.json.testing.Dummy -C $(OUT) jnpn/json
 	jar ufvm $(JAR) manifest
 
 run:	jar
@@ -19,21 +27,19 @@ run:	jar
 
 cleanbuild:
 	rm -rv build/jnpn/
-	rm $(JAR)
+	rm jars/$(JAR)
 
 compile:	hi
-	echo SOURCE_DIRS: $(SOURCE_DIRS)
-	#	javac -cp $(JARS) -d build $(shell ./packages.py) # $(SOURCE_DIRS)
-	javac -cp $(JARS) -d build $(SOURCE_DIRS)
+	@javac -cp $(CP) -d $(OUT) $(shell ./scripts/packages.py) # $(SOURCE_DIRS) ## old version
 
 compilev:	hi
-	javac -verbose -cp build -d build src/jnpn/json/*
+	@javac $(VERBOSE) -cp $(CP) -d $(OUT) src/jnpn/json/*
 
 test:	jar
-	java -cp $(JARS):build:. -jar $(JAR) jnpn.json.testing.Dummy
+	java -cp $(CP) -jar $(JAR) $(TEST)
 
 hi:
 	echo "make:jsondoclet"
 
 doctest: jar
-	javadoc -cp $(JARS) -doclet jnpn.json.JsonDoclet -docletpath $(JAR) src/jnpn/json/*.java
+	javadoc -cp $(CP) -doclet $(DOCLET) -docletpath $(JAR) $(shell ./scripts/packages.py) # src/jnpn/json/*.java
