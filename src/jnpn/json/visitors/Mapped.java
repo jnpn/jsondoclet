@@ -8,6 +8,8 @@ import javax.tools.Diagnostic.Kind;
 import com.sun.source.util.*;
 import com.sun.source.util.DocSourcePositions;
 
+import jnpn.json.utils.*;
+
 /**
  * @class Mapped : JSON tree visitor for Doclets
  * @param x value of ....
