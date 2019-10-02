@@ -9,6 +9,11 @@ import javax.lang.model.element.*;
 import javax.tools.Diagnostic.Kind;
 import com.sun.source.util.DocSourcePositions;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonArray;
+
 public class JSON implements Doclet {
 
     @Override
@@ -20,87 +25,58 @@ public class JSON implements Doclet {
     @Override
     public SourceVersion getSupportedSourceVersion() { return SourceVersion.RELEASE_9; }
 
+    private JsonObject prologue(Element e) {
+	    var j = new JsonObject();
+	    j.addProperty("name", e.getClass().getName().toString());
+	    j.addProperty("simplename", e.getSimpleName().toString());
+	    j.addProperty("enclosingelement", e.getEnclosingElement​().toString());
+	    j.addProperty("kind", e.getKind​().toString());
+
+	    var jm = new JsonArray();
+	    e.getModifiers().stream().forEach((m) -> jm.add(m.toString()));
+	    j.add("modifiers", jm);
+
+	    var ja = new JsonArray();
+	    e.getAnnotationMirrors().stream().forEach((a) -> ja.add(a.toString()));
+	    j.add("annotations", ja);
+
+	    var doc = trees.getDocCommentTree(e);
+	    var lines = (doc != null) ? doc.getFullBody().toString() : "null doctree";
+	    j.addProperty("DocTree", lines);
+
+	    return j
+    }
+
     @Override
-    public boolean run(DocletEnvironment environment) { 
+    public boolean run(DocletEnvironment environment) {
+
+	System.out.println("---- JSON.java Docet [JDK9 API] ----");
+
 	var trees = environment.getDocTrees();
-	if (trees == null) { System.out.println("WAT TREES"); return false; }
+	if (trees == null) {
+	    System.out.println("[WARNING] NO TREES");
+	    return false;
+	}
+
 	System.out.println("TREES: " + trees);
+
 	var elems = environment.getIncludedElements();
-	var indent = "   ";
+	var gson = new GsonBuilder().setPrettyPrinting().create();
 
 	System.out.println("Listing Elements");
 
 	for (Element e : elems) {
-	    System.out.println("\n");
-	    System.out.println(e + " (" + e.getClass().getName() + ")");
-	    System.out.println("----");
 
-	    System.out.println(indent + "simple name: " + e.getSimpleName());
-	    // System.out.println(indent + e.hashCode​());
-	    System.out.println(indent + "as type: " + e.asType​());
+	    System.out.println("--- " + e);
 
-	    System.out.println(indent + "enc element: " + e.getEnclosingElement​());
-	    System.out.println(indent + "kind: " + e.getKind​());
+	    var p = prologue(e);
+	    System.out.println(gson.toJson(p));
 
-	    System.out.println(indent + "modifiers:");
-	    for (Modifier m : e.getModifiers()) {
-		System.out.println(indent + " - " + m);
-	    }
-
-	    System.out.println("DocTree:");
-	    var doc = trees.getDocCommentTree(e);
-	    if (doc == null) {
-		System.out.println("null doctree...");
-	    } else {
-		System.out.println(doc.getFullBody());
-	    }
-
-	    // <A extends Annotation> A	getAnnotation​(Class<A> annotationType)
-	    // List<? extends AnnotationMirror> getAnnotationMirrors​()
-	    System.out.println(indent + "annotations:");
-	    for (AnnotationMirror a : e.getAnnotationMirrors()) {
-		System.out.println(indent + " @ " + a);
-	    }
-	    // List<? extends Element> getEnclosedElements​()
-
-	    var v = new MVisitor(trees);
-	    var m = new HashMap<String,List<String>>();
-	    var r = v.visit(e, m);
-	    var pre = "  --  ";
-	    System.out.println("Doc Map:");
-	    System.out.println("-------");
-	    r.entrySet()
-		.stream()
-		.filter((d) -> { return (d.getValue().size() > 0); })
-		.forEach((d) -> {
-			var dk = d.getKey();
-			var dv = d.getValue()
-			    .stream()
-			    .map((s) -> { return pre + s.replace("\n", "\n " + pre); })
-			    .collect(Collectors.toList());
-			System.out.println(" - " + dk + " ::: Comment\n" + dv + "\n");
-		    });
-
-	    // JSON output
-	    //  {
-	    //    comments: {
-	    //      "${qualName}" : "${comment},
-	    //      ...
-	    //    }
-	    //  }
-
+	    var v = new JSONVisitor(trees);
+	    var r = v.visit(e, null);
 	    Function<String,String> wrapped = (s) -> { return "\"" + s + "\""; };
-	    // withOpenFile("fn", (file) -> {
-	    //	    file.writeln("{");
-	    //	    file.writeln("  comments: {");
-	    //	    r.entrySet()
-	    //		.stream()
-	    //		.forEach((d) -> {
-	    //			file.writeln("\"" + d.getKey() + "\"" + ":" + "\"" + d.getValue() + "\"");
-	    //		    });
-	    //	    file.writeln("  }");
-	    //	    file.writeln("}");
-	    //	});
+
+	    System.out.println(".");
 
 	}
 	return true;
@@ -111,7 +87,7 @@ public class JSON implements Doclet {
 	System.out.println("doclet: " + getName());
 	System.out.println("locale: " + locale);
 	System.out.println("reporter: " + reporter);
-        reporter.print(Kind.NOTE, "> " + some());
+	reporter.print(Kind.NOTE, "> " + some());
     }
 
     public String some() { return "some"; }
@@ -122,7 +98,7 @@ public class JSON implements Doclet {
      *   it does things,
      *   or nothing,
      *   it's up to you.
-     *   
+     *
      * ~also:
      *   more comment ?
      *   yes.
@@ -130,7 +106,7 @@ public class JSON implements Doclet {
      * @param args : cli arguments
      * @param foo : fake
      * @param bar : fake'
-     * 
+     *
      * The end.
      * @end.
      **/
