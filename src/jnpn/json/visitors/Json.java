@@ -44,11 +44,11 @@ public class Json implements ElementVisitor<JsonElement,Void> {
 
     private JsonElement basic(Element e) {
 	var children = new JsonArray();
-	
+
 	for (Element ee : e.getEnclosedElements()) {
-	     System.out.println(indent + ee);
-	     var o = ee.accept(this, null);
-	     children.add(o);
+	    //System.out.println(indent + ee);
+	    var o = ee.accept(this, null);
+	    children.add(o);
 	}
 
 	var j = new JsonObject();
@@ -61,16 +61,16 @@ public class Json implements ElementVisitor<JsonElement,Void> {
     public JsonElement visitModule(ModuleElement e, Void p) { System.out.println(""); return null; }
 
     public JsonElement visit(Element e, Void p) {
-    	System.out.println("- visit: " + e + " | " + e.getKind());
-    	System.out.println(indent + "annotations?");
+	//	System.out.println("- visit: " + e + " | " + e.getKind());
+	//	System.out.println(indent + "annotations?");
 	e.accept(this, null);
-    	return basic(e);
+	return basic(e);
     }
 
     public JsonElement visitExecutable(ExecutableElement e, Void p) {
-	System.out.println("visitExecutable: " + e);
+	//	System.out.println("visitExecutable: " + e);
 	//var o = root.toJson(e); // <= gson doesn't like javax.lang.model
-	return null;
+	return basic(e);
     }
 
     private JsonElement jseq(Element e) {
@@ -80,17 +80,17 @@ public class Json implements ElementVisitor<JsonElement,Void> {
     }
 
     public JsonElement visitPackage(PackageElement e, Void p) {
-	System.out.println("visitPackage: " + e + " -> " + jseq(e));
+	//	System.out.println("visitPackage: " + e + " -> " + jseq(e));
 	return basic(e);
     }
 
     public JsonElement visitType(TypeElement e, Void p) {
-	System.out.println("visitType: " + e + " -> " + jseq(e));
+	//	System.out.println("visitType: " + e + " -> " + jseq(e));
 	return basic(e);
     }
 
     public JsonElement visitTypeParameter(TypeParameterElement e, Void p) {
-	System.out.println("visitTypeParameter" + " -> " + jseq(e));
+	//	System.out.println("visitTypeParameter" + " -> " + jseq(e));
 	return basic(e);
     }
 
@@ -104,7 +104,7 @@ public class Json implements ElementVisitor<JsonElement,Void> {
 	    .stream()
 	    .map((el) -> { return root.toJson(el); })
 	    .collect(Collectors.toList());
-	System.out.println("visitUnknown" + "visitVariable" + " -> " + js);
+	// System.out.println("visitVariable" + " -> " + js);
 	return basic(e);
     }
 
