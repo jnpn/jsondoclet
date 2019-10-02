@@ -7,6 +7,7 @@ import jdk.javadoc.doclet.*;
 import javax.lang.model.*;
 import javax.lang.model.element.*;
 import javax.tools.Diagnostic.Kind;
+import com.sun.source.doctree.DocTree;
 import com.sun.source.util.DocSourcePositions;
 
 import com.google.gson.Gson;
@@ -14,7 +15,9 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonArray;
 
-public class JSON implements Doclet {
+import jnpn.json.visitors.Json;
+
+public class JSONDoclet implements Doclet {
 
     @Override
     public String getName() { return "jnpn.JSON:Doclet"; }
@@ -25,7 +28,7 @@ public class JSON implements Doclet {
     @Override
     public SourceVersion getSupportedSourceVersion() { return SourceVersion.RELEASE_9; }
 
-    private JsonObject prologue(Element e) {
+    private JsonObject prologue(Element e, List<DocTree> trees) {
 	    var j = new JsonObject();
 	    j.addProperty("name", e.getClass().getName().toString());
 	    j.addProperty("simplename", e.getSimpleName().toString());
@@ -44,7 +47,7 @@ public class JSON implements Doclet {
 	    var lines = (doc != null) ? doc.getFullBody().toString() : "null doctree";
 	    j.addProperty("DocTree", lines);
 
-	    return j
+	    return j;
     }
 
     @Override
@@ -69,10 +72,10 @@ public class JSON implements Doclet {
 
 	    System.out.println("--- " + e);
 
-	    var p = prologue(e);
+	    var p = prologue(e, trees);
 	    System.out.println(gson.toJson(p));
 
-	    var v = new JSONVisitor(trees);
+	    var v = new Json(trees);
 	    var r = v.visit(e, null);
 	    Function<String,String> wrapped = (s) -> { return "\"" + s + "\""; };
 

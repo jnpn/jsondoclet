@@ -1,4 +1,4 @@
-package jnpn.json;
+package jnpn.json.visitors;
 
 import java.util.*;
 import java.util.stream.*;
@@ -20,17 +20,17 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonArray;
 
 /**
- * @class JVisitor : JSON tree visitor for Doclets
+ * @class Json : JSON tree visitor for Doclets
  * @param None
  * @return a JSON Document
  */
-public class JSONVisitor implements ElementVisitor<JsonElement,Void> {
+public class Json implements ElementVisitor<JsonElement,Void> {
 
     private Gson root;
     private DocTrees trees;
     private String indent = "   ";
 
-    public JSONVisitor(DocTrees trees) {
+    public Json(DocTrees trees) {
 	this.trees = trees;
 	var b = new GsonBuilder();
 	b.registerTypeAdapter(ExecutableElement.class, new JSONExecutable());

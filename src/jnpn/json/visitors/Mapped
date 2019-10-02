@@ -1,4 +1,4 @@
-package jnpn.json;
+package jnpn.json.visitors;
 
 import java.util.*;
 import jdk.javadoc.doclet.*;
@@ -9,18 +9,18 @@ import com.sun.source.util.*;
 import com.sun.source.util.DocSourcePositions;
 
 /**
- * @class MVisitor : JSON tree visitor for Doclets
+ * @class Mapped : JSON tree visitor for Doclets
  * @param x value of ....
  * @return result of ....
  */
-public class MVisitor implements ElementVisitor<Map<String,List<String>>,Map<String,List<String>>> {
+public class Mapped implements ElementVisitor<Map<String,List<String>>,Map<String,List<String>>> {
 
     private Element root;
     private DocTrees trees;
     private Docer docer;
     private Map<String,List<String>> m;
 
-    public MVisitor(DocTrees trees) {
+    public Mapped(DocTrees trees) {
 	this.trees = trees;
 	this.docer = new Docer();
 	this.m = new HashMap<>();

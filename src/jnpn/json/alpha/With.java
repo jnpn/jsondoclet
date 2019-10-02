@@ -1,4 +1,4 @@
-package jnpn.json;
+package jnpn.json.alpha;
 
 import java.util.function.*;
 

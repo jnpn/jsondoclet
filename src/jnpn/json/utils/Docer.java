@@ -1,4 +1,4 @@
-package jnpn.json;
+package jnpn.json.utils;
 
 import java.util.*;
 import jdk.javadoc.doclet.*;

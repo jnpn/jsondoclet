@@ -4,9 +4,11 @@
 
 JAR=jsondocletbis.jar
 JARS=jars/gson-2.8.5.jar:jars/jedis-3.1.0.jar:$(JAR):.
+TOP=src/jnpn/json
+SOURCE_DIRS=$(TOP)/testing/*.java $(TOP)/modelserializers/*.java $(TOP)/**/*.java
 
 jar:	compile
-	jar cfve $(JAR) jnpn.json.JVTest -C build jnpn/json
+	jar cfve $(JAR) jnpn.json.testing.Dummy -C build jnpn/json
 	# following line is the good idea
 	# but doesn't work
 	# updating the .jar manifest by hand to add class-path fix the bug
@@ -16,20 +18,22 @@ run:	jar
 	java -jar $(JAR)
 
 cleanbuild:
+	rm -rv build/jnpn/
 	rm $(JAR)
-	rm -rv build/jnpn/json/
 
 compile:	hi
-	javac -cp $(JARS) -d build src/jnpn/json/modelserializers/*.java src/jnpn/json/*.java
+	echo SOURCE_DIRS: $(SOURCE_DIRS)
+	#	javac -cp $(JARS) -d build $(shell ./packages.py) # $(SOURCE_DIRS)
+	javac -cp $(JARS) -d build $(SOURCE_DIRS)
 
 compilev:	hi
 	javac -verbose -cp build -d build src/jnpn/json/*
 
-test:	compile
-	java -cp $(JARS) jnpn.json.JVTest
+test:	jar
+	java -cp $(JARS):build:. -jar $(JAR) jnpn.json.testing.Dummy
 
 hi:
 	echo "make:jsondoclet"
 
 doctest: jar
-	javadoc -cp $(JARS) -doclet jnpn.json.JSON -docletpath $(JAR) src/jnpn/json/*.java
+	javadoc -cp $(JARS) -doclet jnpn.json.JsonDoclet -docletpath $(JAR) src/jnpn/json/*.java
