@@ -2,26 +2,34 @@
 #
 # https://www.codejava.net/java-core/tools/using-jar-command-examples
 
+JAR=jsondocletbis.jar
+JARS=jars/gson-2.8.5.jar:jars/jedis-3.1.0.jar:$(JAR):.
+
 jar:	compile
-	jar -cfve jsondocletbis.jar jnpn.json.JVTest -C build jnpn/json
+	jar cfve $(JAR) jnpn.json.JVTest -C build jnpn/json
+	# following line is the good idea
+	# but doesn't work
+	# updating the .jar manifest by hand to add class-path fix the bug
+	jar ufvm $(JAR) manifest
 
 run:	jar
-	java -jar jsondocletbis.jar
+	java -jar $(JAR)
 
 cleanbuild:
-	rm -v build/jnpn/json/*.class
+	rm $(JAR)
+	rm -rv build/jnpn/json/
 
 compile:	hi
-	javac -cp build -d build src/jnpn/json/*
+	javac -cp $(JARS) -d build src/jnpn/json/modelserializers/*.java src/jnpn/json/*.java
 
 compilev:	hi
 	javac -verbose -cp build -d build src/jnpn/json/*
 
-test:	build
-	java -cp build jnpn.json.JVTest
+test:	compile
+	java -cp $(JARS) jnpn.json.JVTest
 
 hi:
 	echo "make:jsondoclet"
 
 doctest: jar
-	javadoc -cp jsondocletbis.jar -doclet jnpn.json.JSON -docletpath jsondocletbis.jar src/jnpn/json/*.java
+	javadoc -cp $(JARS) -doclet jnpn.json.JSON -docletpath $(JAR) src/jnpn/json/*.java
