@@ -1,6 +1,6 @@
 package jnpn.json;
 
-public interface <R> Resource<R> {
-    public void open<R>(R r);
+public interface IResource<R> {
+    public void open();
     public R close();
 }

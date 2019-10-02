@@ -1,5 +1,6 @@
 package jnpn.json;
 
+import java.io.File;
 import java.util.function.*;
 
 class FileResource implements IResource<File> {
@@ -9,11 +10,12 @@ class FileResource implements IResource<File> {
     }
 
     public void open() {
-	this.f.open();
+	// this.f.open();
+	return;
     }
 
     public File close() {
-	this.f.close();
+	// this.f.close();
 	return this.f;
     }
 }
@@ -25,19 +27,19 @@ class FileResource implements IResource<File> {
  * (<name> -> <block>.apply(<name>)).apply(<object>)
  *
  **/
-public class <R,T> With {
+public class With<R,T> {
     private IResource<R> r;
-    private Function<Resource<R>, T> f;
+    private Function<IResource<R>, T> f;
 
-    public With(IResource<R> r, Function<Resource<R>, T> f) {
+    public With(IResource<R> r, Function<IResource<R>, T> f) {
 	this.r = r;
 	this.f = f;
     }
 
-    public apply() {
-	this.r.open();
-	var t = f.apply(q);
-	var s = q.close();
+    public T apply() {
+	r.open();
+	var t = f.apply(r);
+	var s = r.close();
 	return t;
     }
 
