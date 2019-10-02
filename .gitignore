@@ -1,3 +1,4 @@
 *.jar
 *~
 build/
+debug-logs/

@@ -1,24 +1,6 @@
 package jnpn.json;
 
-import java.io.File;
 import java.util.function.*;
-
-class FileResource implements IResource<File> {
-    private File f;
-    public FileResource(File f) {
-	this.f = f;
-    }
-
-    public void open() {
-	// this.f.open();
-	return;
-    }
-
-    public File close() {
-	// this.f.close();
-	return this.f;
-    }
-}
 
 /**
  * mimicking python Contexts
@@ -28,9 +10,33 @@ class FileResource implements IResource<File> {
  *
  **/
 public class With<R,T> {
+
+/**
+ * mimicking python Contexts
+ * With <object> as <name>: <block>
+ * ==
+ * (<name> -> <block>.apply(<name>)).apply(<object>)
+ *
+ **/
     private IResource<R> r;
+
+/**
+ * mimicking python Contexts
+ * With <object> as <name>: <block>
+ * ==
+ * (<name> -> <block>.apply(<name>)).apply(<object>)
+ *
+ **/
     private Function<IResource<R>, T> f;
 
+
+/**
+ * mimicking python Contexts
+ * With <object> as <name>: <block>
+ * ==
+ * (<name> -> <block>.apply(<name>)).apply(<object>)
+ *
+ **/
     public With(IResource<R> r, Function<IResource<R>, T> f) {
 	this.r = r;
 	this.f = f;
