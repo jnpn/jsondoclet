@@ -85,30 +85,7 @@ public class JSONDoclet implements Doclet {
 	}
 	return true;
     }
-
-    boolean convert(DocletEnvironment env) {
-	var trees = env.getDocTrees();
-	if (trees == null) {
-	    System.err.println("[WARNING] NO TREES");
-	    return false;
-	}
-	var elems = env.getIncludedElements();
-	var gson = new GsonBuilder().setPrettyPrinting().create();
-
-	System.out.println("Listing Elements");
-	
-	// var jsons = elems
-	//     .stream()
-	//     .map(toJson);
-
-	for (Element e : elems) {
-	    System.out.println("--- " + e);
-	    var p = prologue(e, trees);
-	    var r = new Json(trees).visit(e, null);
-	    p.add("elements", r);
-	    System.out.println(gson.toJson(p));
-	    save(e.getSimpleName().toString(), gson.toJson(p));
-	}
+    
     private boolean showEnvironment(DocletEnvironment environment) {
 
 	System.out.println(environment);
