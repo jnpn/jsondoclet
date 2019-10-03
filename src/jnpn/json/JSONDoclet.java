@@ -150,33 +150,7 @@ public class JSONDoclet implements Doclet {
 	System.out.println("doclet: " + getName());
 	System.out.println("locale: " + locale);
 	System.out.println("reporter: " + reporter);
-	reporter.print(Kind.NOTE, "> " + some());
-    }
-
-    public String some() { return "some"; }
-
-    /**
-     * Public Static Void Main:
-     *   this is the main method.
-     *   it does things,
-     *   or nothing,
-     *   it's up to you.
-     *
-     * ~also:
-     *   more comment ?
-     *   yes.
-     *
-     * @param args : cli arguments
-     * @param foo : fake
-     * @param bar : fake'
-     *
-     * The end.
-     * @end.
-     **/
-    public static void main(String[] args) {
-	var s = "foo";
-	System.out.println(s);
-	System.out.println(new JSONDoclet().getName() + " bye.");
+	reporter.print(Kind.NOTE, "> " + "...");
     }
 
 }
