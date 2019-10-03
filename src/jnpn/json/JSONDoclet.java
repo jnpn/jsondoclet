@@ -29,29 +29,7 @@ public class JSONDoclet implements Doclet {
 
     @Override
     public SourceVersion getSupportedSourceVersion() { return SourceVersion.RELEASE_9; }
-
-    private JsonObject prologue(Element e, DocTrees trees) {
-	    var j = new JsonObject();
-	    j.addProperty("name", e.getClass().getName().toString());
-	    j.addProperty("simplename", e.getSimpleName().toString());
-	    j.addProperty("enclosingelement", e.getEnclosingElement​().toString());
-	    j.addProperty("kind", e.getKind​().toString());
-
-	    var jm = new JsonArray();
-	    e.getModifiers().stream().forEach((m) -> jm.add(m.toString()));
-	    j.add("modifiers", jm);
-
-	    var ja = new JsonArray();
-	    e.getAnnotationMirrors().stream().forEach((a) -> ja.add(a.toString()));
-	    j.add("annotations", ja);
-
-	    var doc = trees.getDocCommentTree(e);
-	    var lines = (doc != null) ? doc.getFullBody().toString() : "null doctree";
-	    j.addProperty("DocTree", lines);
-
-	    return j;
-    }
-
+    
     @Override
     public boolean run(DocletEnvironment environment) {
 
@@ -65,23 +43,14 @@ public class JSONDoclet implements Doclet {
 	    return false;
 	}
 
-	System.out.println("TREES: " + trees);
-
-	var elems = environment.getIncludedElements();
+	var elems = environment.getSpecifiedElements();
 	var gson = new GsonBuilder().setPrettyPrinting().create();
 
-	System.out.println("Listing Elements");
-
 	for (Element e : elems) {
-
 	    System.out.println("--- " + e);
-
-	    var p = prologue(e, trees);
 	    var r = new Json(trees).visit(e, null);
-	    //	    System.out.println(gson.toJson(r));
-	    p.add("elements", r);
-	    System.out.println(gson.toJson(p));
-	    save(e.getSimpleName().toString(), gson.toJson(p));
+	    System.out.println(gson.toJson(r));
+	    save(e.getSimpleName().toString(), gson.toJson(r));
 	}
 	return true;
     }

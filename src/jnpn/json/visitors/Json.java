@@ -45,15 +45,34 @@ public class Json implements ElementVisitor<JsonElement,Void> {
     private JsonElement basic(Element e) {
 	var children = new JsonArray();
 
+	var t = trees.getDocCommentTree(e);
 	for (Element ee : e.getEnclosedElements()) {
-	    //System.out.println(indent + ee);
 	    var o = ee.accept(this, null);
 	    children.add(o);
 	}
 
 	var j = new JsonObject();
-	j.addProperty("kind", e.getKind().toString());
-	j.addProperty("name", e.toString());
+	j.addProperty("name", e.getClass().getName().toString());
+	j.addProperty("simplename", e.getSimpleName().toString());
+	j.addProperty("enclosingelement", e.getEnclosingElement​().toString());
+	j.addProperty("kind", e.getKind​().toString());
+	// j.addProperty("kind", e.getKind().toString());
+	// j.addProperty("name", e.toString());
+
+	var jm = new JsonArray();
+	e.getModifiers().stream().forEach((m) -> jm.add(m.toString()));
+	j.add("modifiers", jm);
+
+	var ja = new JsonArray();
+	e.getAnnotationMirrors().stream().forEach((a) -> ja.add(a.toString()));
+	j.add("annotations", ja);
+
+	// var t = trees.getDocCommentTree(e);
+	// j.addProperty("doc", (t != null) ? t.toString() : "absent");
+	// j.addProperty("doc", (t != null) ? t.toString() : "absent");
+	var doc = trees.getDocCommentTree(e);
+	var lines = (doc != null) ? doc.getFullBody().toString() : "null doctree";
+	j.addProperty("DocTree", lines);
 	j.add("elements", children);
 	return j;
     }
