@@ -43,21 +43,11 @@ public class Json implements ElementVisitor<JsonElement,Void> {
     }
 
     private JsonElement basic(Element e) {
-	var children = new JsonArray();
-
-	var t = trees.getDocCommentTree(e);
-	for (Element ee : e.getEnclosedElements()) {
-	    var o = ee.accept(this, null);
-	    children.add(o);
-	}
-
 	var j = new JsonObject();
 	j.addProperty("name", e.getClass().getName().toString());
 	j.addProperty("simplename", e.getSimpleName().toString());
 	j.addProperty("enclosingelement", e.getEnclosingElement​().toString());
 	j.addProperty("kind", e.getKind​().toString());
-	// j.addProperty("kind", e.getKind().toString());
-	// j.addProperty("name", e.toString());
 
 	var jm = new JsonArray();
 	e.getModifiers().stream().forEach((m) -> jm.add(m.toString()));
@@ -67,12 +57,13 @@ public class Json implements ElementVisitor<JsonElement,Void> {
 	e.getAnnotationMirrors().stream().forEach((a) -> ja.add(a.toString()));
 	j.add("annotations", ja);
 
-	// var t = trees.getDocCommentTree(e);
-	// j.addProperty("doc", (t != null) ? t.toString() : "absent");
-	// j.addProperty("doc", (t != null) ? t.toString() : "absent");
 	var doc = trees.getDocCommentTree(e);
-	var lines = (doc != null) ? doc.getFullBody().toString() : "null doctree";
+	var lines = (doc != null) ? doc.getFullBody().toString() : "";
 	j.addProperty("DocTree", lines);
+
+	var children = new JsonArray();
+	e.getEnclosedElements().forEach((en) -> children.add(en.accept(this, null)));
+
 	j.add("elements", children);
 	return j;
     }
@@ -80,15 +71,11 @@ public class Json implements ElementVisitor<JsonElement,Void> {
     public JsonElement visitModule(ModuleElement e, Void p) { System.out.println(""); return null; }
 
     public JsonElement visit(Element e, Void p) {
-	//	System.out.println("- visit: " + e + " | " + e.getKind());
-	//	System.out.println(indent + "annotations?");
 	e.accept(this, null);
 	return basic(e);
     }
 
     public JsonElement visitExecutable(ExecutableElement e, Void p) {
-	//	System.out.println("visitExecutable: " + e);
-	//var o = root.toJson(e); // <= gson doesn't like javax.lang.model
 	return basic(e);
     }
 
@@ -99,17 +86,14 @@ public class Json implements ElementVisitor<JsonElement,Void> {
     }
 
     public JsonElement visitPackage(PackageElement e, Void p) {
-	//	System.out.println("visitPackage: " + e + " -> " + jseq(e));
 	return basic(e);
     }
 
     public JsonElement visitType(TypeElement e, Void p) {
-	//	System.out.println("visitType: " + e + " -> " + jseq(e));
 	return basic(e);
     }
 
     public JsonElement visitTypeParameter(TypeParameterElement e, Void p) {
-	//	System.out.println("visitTypeParameter" + " -> " + jseq(e));
 	return basic(e);
     }
 
