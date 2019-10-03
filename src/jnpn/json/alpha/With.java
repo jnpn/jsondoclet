@@ -11,37 +11,31 @@ import java.util.function.*;
  **/
 public class With<R,T> {
 
-/**
- * mimicking python Contexts
- * With <object> as <name>: <block>
- * ==
- * (<name> -> <block>.apply(<name>)).apply(<object>)
- *
- **/
+    /**
+     * field r: resource
+     **/
     private IResource<R> r;
 
-/**
- * mimicking python Contexts
- * With <object> as <name>: <block>
- * ==
- * (<name> -> <block>.apply(<name>)).apply(<object>)
- *
- **/
+    /**
+     * field f: thunk to apply with resource accessible
+     **/
     private Function<IResource<R>, T> f;
 
 
-/**
- * mimicking python Contexts
- * With <object> as <name>: <block>
- * ==
- * (<name> -> <block>.apply(<name>)).apply(<object>)
- *
- **/
+    /**
+     * main constructor (IResource, IResource -> T)
+     **/
     public With(IResource<R> r, Function<IResource<R>, T> f) {
 	this.r = r;
 	this.f = f;
     }
 
+    /**
+     * main method apply:
+     *  - open resource
+     *  - apply thunk yield r
+     *  - close resource
+     **/
     public T apply() {
 	r.open();
 	var t = f.apply(r);
