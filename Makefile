@@ -30,7 +30,7 @@ cleanbuild:
 	rm jars/$(JAR)
 
 compile:	hi
-	@javac -cp $(CP) -d $(OUT) $(shell ./scripts/packages.py) # $(SOURCE_DIRS) ## old version
+	@javac -cp $(CP) -d $(OUT) $(shell ./scripts/packages.py --sources) # $(SOURCE_DIRS) ## old version
 
 compilev:	hi
 	@javac $(VERBOSE) -cp $(CP) -d $(OUT) src/jnpn/json/*
@@ -39,7 +39,7 @@ test:	jar
 	java -cp $(CP) -jar $(JAR) $(TEST)
 
 hi:
-	echo "make:jsondoclet"
+	@echo "make:jsondoclet"
 
 doctest: jar
-	javadoc -cp $(CP) -doclet $(DOCLET) -docletpath $(JAR) $(shell ./scripts/packages.py) # src/jnpn/json/*.java
+	javadoc -cp $(CP) -doclet $(DOCLET) -docletpath $(JAR) $(shell ./scripts/packages.py --sources) # src/jnpn/json/*.java
