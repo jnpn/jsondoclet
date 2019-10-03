@@ -19,6 +19,7 @@ public class With<R,T> {
     /**
      * field f: thunk to apply with resource accessible
      **/
+    @Deprecated
     private Function<IResource<R>, T> f;
 
 
@@ -36,6 +37,8 @@ public class With<R,T> {
      *  - apply thunk yield r
      *  - close resource
      **/
+    @Deprecated
+    @SuppressWarnings("deprecation")
     public T apply() {
 	r.open();
 	var t = f.apply(r);
