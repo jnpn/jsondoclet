@@ -55,9 +55,9 @@ public class JSONDoclet implements Doclet {
     @Override
     public boolean run(DocletEnvironment environment) {
 
-	Function<String,String> wrapped = (s) -> { return "\"" + s + "\""; };
+	System.out.println("---- JSON.java Doclet [JDK9 API] ----");
 
-	System.out.println("---- JSON.java Docet [JDK9 API] ----");
+	showEnvironment(environment);
 
 	var trees = environment.getDocTrees();
 	if (trees == null) {
@@ -109,7 +109,23 @@ public class JSONDoclet implements Doclet {
 	    System.out.println(gson.toJson(p));
 	    save(e.getSimpleName().toString(), gson.toJson(p));
 	}
+    private boolean showEnvironment(DocletEnvironment environment) {
+
+	System.out.println(environment);
+
+	System.out.println(environment.getDocTrees());	// Returns an instance of the DocTrees utility class.
+	//	System.out.println(environment.getElementUtils());	// Returns an instance of the Elements utility class.
+	//	System.out.println(environment.getFileKind(TypeElement type));	// Returns the file kind of a type element.
+	System.out.println(" - included: " + environment.getIncludedElements());	// Returns the module, package and type elements that should be included in the documentation.
+	//	System.out.println(environment.getJavaFileManager());	// Returns the file manager used to read and write files.
+	System.out.println(environment.getModuleMode());	// Returns the required level of module documentation.
+	System.out.println(environment.getSourceVersion());	// Returns the source version of the source files that were read.
+	System.out.println(" - elements: " + environment.getSpecifiedElements());	// Returns the elements specified when the tool is invoked.
+	//	System.out.println(environment.getTypeUtils());	// Returns an instance of the Types utility class.
+	//	System.out.println(environment.isIncluded(Element e));	// Returns true if an element should be included in the documentation.
+	//	System.out.println(environment.isSelected(Element e));	// Returns true if the element is selected.
 	return true;
+
     }
 
     private boolean save(String name, String json) {
