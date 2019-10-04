@@ -6,7 +6,6 @@ VERSION=0.1b
 
 JAR=jsondocletbis_$(VERSION).jar
 LIB=libs
-LIBS=$(LIB)/gson-2.8.5.jar:$(LIB)/jedis-3.1.0.jar
 OUT=build
 CP=$(LIBS):$(JAR):.
 
@@ -30,16 +29,16 @@ cleanbuild:
 	rm jars/$(JAR)
 
 compile:	hi
-	@javac -cp $(CP) -d $(OUT) $(shell ./scripts/packages.py --sources) # $(SOURCE_DIRS) ## old version
+	javac -cp $(shell ./scripts/packages.py --libs libs) -d $(OUT) $(shell ./scripts/packages.py --sources) # $(SOURCE_DIRS) ## old version	
 
 compilev:	hi
 	@javac $(VERBOSE) -cp $(CP) -d $(OUT) src/jnpn/json/*
 
 test:	jar
-	java -cp $(CP) -jar $(JAR) $(TEST)
+	java -cp $(shell ./scripts/packages.py --libs libs) -jar $(JAR) $(TEST)
 
 hi:
 	@echo "make:jsondoclet"
 
 doctest: jar
-	javadoc -cp $(CP) -doclet $(DOCLET) -docletpath $(JAR) $(shell ./scripts/packages.py --sources) # src/jnpn/json/*.java
+	javadoc -cp $(shell ./scripts/packages.py --libs libs) -doclet $(DOCLET) -docletpath $(JAR) $(shell ./scripts/packages.py --sources) # src/jnpn/json/*.java
