@@ -14,19 +14,29 @@ VERBOSE=-verbose
 TOP=src/jnpn/json
 SOURCE_DIRS=$(TOP)/testing/*.java $(TOP)/modelserializers/*.java $(TOP)/**/*.java
 
+META=meta-inf
 DOCLET=jnpn.json.JSONDoclet
 TEST=jnpn.json.testing.Dummy
 
-jar:	compile
-	jar cfve $(JAR) jnpn.json.testing.Dummy -C $(OUT) jnpn/json
-	jar ufvm $(JAR) manifest
+remanifest:
+	$(shell ./scripts/manifest.py)
+	@echo new manifest
+	@cat $(META)/manifest-cp.mf
+
+jar:	remanifest compile
+	@echo '-- check manifest'
+	@cat $(META)/manifest-cp.mf
+	@cat $(META)/manifest-name.mf
+	jar cfve $(JAR) $(TEST) -C $(OUT) jnpn/json
+	jar ufvm $(JAR) meta-inf/manifest-cp.mf
+	jar ufvm $(JAR) meta-inf/manifest-name.mf
 
 run:	jar
 	java -jar $(JAR)
 
 cleanbuild:
-	rm -rv build/jnpn/
-	rm jars/$(JAR)
+	-rm -rv build/jnpn/
+	-rm $(JAR)
 
 compile:	hi
 	javac -cp $(shell ./scripts/packages.py --libs libs) -d $(OUT) $(shell ./scripts/packages.py --sources) # $(SOURCE_DIRS) ## old version	
