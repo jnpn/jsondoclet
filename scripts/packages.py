@@ -23,14 +23,6 @@ def vmatch(a, b, var=None):
 
 ################################################################### CORE
 
-# def sources(root, sep=' ', pattern=os.path.sep.join(['**','*.java'])):
-#     ''' Path > str > str -> str'''
-#     assert isinstance(root, pathlib.Path)
-#     r = str(root / pattern)
-#     dbg(r)
-#     matches = glob.glob(r)
-#     return sep.join(matches)
-
 def s(root, pred):
     return ((top,fn)
             for top,dirs,files in os.walk(root)
