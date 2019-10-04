@@ -79,12 +79,6 @@ public class Json implements ElementVisitor<JsonElement,Void> {
 	return basic(e);
     }
 
-    private JsonElement jseq(Element e) {
-	var j = new JsonObject();
-	j.addProperty(":json", e.toString());
-	return j;
-    }
-
     public JsonElement visitPackage(PackageElement e, Void p) {
 	return basic(e);
     }
@@ -103,11 +97,6 @@ public class Json implements ElementVisitor<JsonElement,Void> {
     }
 
     public JsonElement visitVariable(VariableElement e, Void p) {
-	var js = e.getEnclosedElements()
-	    .stream()
-	    .map((el) -> { return root.toJson(el); })
-	    .collect(Collectors.toList());
-	// System.out.println("visitVariable" + " -> " + js);
 	return basic(e);
     }
 
