@@ -19,6 +19,10 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonArray;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 /**
  * @class Json : JSON tree visitor for Doclets
  * @param None
@@ -31,8 +35,26 @@ public class Json implements ElementVisitor<JsonElement,Void> {
     private String indent = "   ";
 
     public Json(DocTrees trees) {
+	try {
+	    System.out.println("---- ---- ----");
+	    Bean b0 = new Bean();
+	    System.out.println("pojo -> " + b0);
+	    var m = new ObjectMapper();
+	    String s = m.writerWithDefaultPrettyPrinter().writeValueAsString(b0);;
+	    System.out.println("json -> " + s);
+	}
+	catch (Exception e) {
+	    System.out.println("Error " + e.getMessage());
+	    e.printStackTrace();
+	}
+
 	this.trees = trees;
 	var b = new GsonBuilder();
+	// unused so far, potential infinite cycle/loop
+	// aww noes, gson cannot handle cyclic structures T_T
+	// options:
+	//  - fork gson
+	//  - make a tree from the javax.model classes
 	b.registerTypeAdapter(ExecutableElement.class, new JSONExecutable());
 	b.registerTypeAdapter(PackageElement.class, new JSONPackage());
 	b.registerTypeAdapter(TypeElement.class, new JSONType());
@@ -76,6 +98,15 @@ public class Json implements ElementVisitor<JsonElement,Void> {
     }
 
     public JsonElement visitExecutable(ExecutableElement e, Void p) {
+	try {
+	    var m = new ObjectMapper();
+	    String s = m.writerWithDefaultPrettyPrinter().writeValueAsString(e);;
+	    System.out.println("json -> " + s);
+	}
+	catch (JsonProcessingException j) {
+	    System.out.println("Error " + j.getMessage());
+	    j.printStackTrace();
+	}
 	return basic(e);
     }
 
