@@ -1,0 +1,2 @@
+Manifest-Idea: "http://www.itcuties.com/tools/maven-custom-manifest-file/"
+Expiration-Date: 2020

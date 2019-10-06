@@ -4,3 +4,4 @@ build/
 debug-logs/
 *pycache*
 /TAGS
+target
