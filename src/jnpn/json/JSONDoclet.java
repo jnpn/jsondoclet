@@ -45,12 +45,15 @@ public class JSONDoclet implements Doclet {
 
 	var elems = environment.getSpecifiedElements();
 	var gson = new GsonBuilder().setPrettyPrinting().create();
+	var sink = new Sink(); // "json" is default
 
 	for (Element e : elems) {
 	    System.out.println("--- " + e);
-	    var r = new Json(trees).visit(e, null);
-	    System.out.println(gson.toJson(r));
-	    save(e.getSimpleName().toString(), gson.toJson(r));
+	    var res = new Json(trees).visit(e, null);
+	    var js = gson.toJson(res);
+	    var fn = e.getSimpleName().toString();
+	    System.err.println(js);
+	    sink.save(fn, js);
 	}
 	return true;
     }
@@ -64,24 +67,7 @@ public class JSONDoclet implements Doclet {
 	System.out.println(" - elements: " + environment.getSpecifiedElements());	// Returns the elements specified when the tool is invoked.
 	return true;
     }
-
-    private boolean save(String name, String json) {
-	// @FIXME: hard coded paths
-	var fn = "json/" + name + ".json";
-	try (Writer writer = new BufferedWriter
-	     (new OutputStreamWriter
-	      (new FileOutputStream(fn), "utf-8"))) {
-	    writer.write(json.toString());
-	    return true;
-	}
-	catch (IOException e) {
-	    System.out.println("Error " + e.getMessage());
-	    e.printStackTrace();
-	} finally {
-	    return false;
-	}
-    }
-
+    
     @Override
     public void init(Locale locale, Reporter reporter) {
 	System.out.println("doclet: " + getName());
