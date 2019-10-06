@@ -98,15 +98,15 @@ public class Json implements ElementVisitor<JsonElement,Void> {
     }
 
     public JsonElement visitExecutable(ExecutableElement e, Void p) {
-	try {
-	    var m = new ObjectMapper();
-	    String s = m.writerWithDefaultPrettyPrinter().writeValueAsString(e);;
-	    System.out.println("json -> " + s);
-	}
-	catch (JsonProcessingException j) {
-	    System.out.println("Error " + j.getMessage());
-	    j.printStackTrace();
-	}
+	// try {
+	//     var m = new ObjectMapper();
+	//     String s = m.writerWithDefaultPrettyPrinter().writeValueAsString(e);;
+	//     System.out.println("json -> " + s);
+	// }
+	// catch (JsonProcessingException j) {
+	//     System.out.println("Error " + j.getMessage());
+	//     j.printStackTrace();
+	// }
 	return basic(e);
     }
 
