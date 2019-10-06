@@ -1,0 +1,22 @@
+* jsondoclet                                                           :beta:
+
+  doclet generating json formatted javadoc
+
+** doctree -> ? -> json tree
+
+** format specs
+
+   define a clear mapping from POJO metaclasses to Json Objects
+
+** TODO tests
+
+   obviously
+
+* redis javadoc server                                                 :none:
+
+  embeds a redis storage so your IDE can query documentation
+
+* CLI                                                                   :wip:
+
+  - jsondoclet generate <source-root>
+  - jsondoclet serve <source-code> <port:8081>
