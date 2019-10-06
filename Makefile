@@ -4,6 +4,7 @@
 
 VERSION=0.1b
 
+JSON=json
 JAR=jsondocletbis_$(VERSION).jar
 LIB=libs
 OUT=build
@@ -39,7 +40,7 @@ cleanbuild:
 	-rm $(JAR)
 
 compile:	hi
-	javac -cp $(shell ./scripts/packages.py --libs libs) -d $(OUT) $(shell ./scripts/packages.py --sources) # $(SOURCE_DIRS) ## old version	
+	javac -cp $(shell ./scripts/packages.py --libs libs) -d $(OUT) $(shell ./scripts/packages.py --sources src) # $(SOURCE_DIRS) ## old version	
 
 compilev:	hi
 	@javac $(VERBOSE) -cp $(CP) -d $(OUT) src/jnpn/json/*
@@ -51,4 +52,8 @@ hi:
 	@echo "make:jsondoclet"
 
 doctest: jar
-	javadoc -cp $(shell ./scripts/packages.py --libs libs) -doclet $(DOCLET) -docletpath $(JAR) $(shell ./scripts/packages.py --sources) # src/jnpn/json/*.java
+	javadoc -cp $(shell ./scripts/packages.py --libs libs) -doclet $(DOCLET) -docletpath $(shell ./scripts/packages.py --libs libs):build $(shell ./scripts/packages.py --sources src)
+
+doctrees:	doctest
+	cat $(JSON)/*.json | jq '.elements | .[].DocTree' | grep -v '""'
+
