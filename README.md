@@ -1,12 +1,12 @@
-# jsondoclet(bis)                                                       :beta:
+# jsondoclet(beta)
 
 	JSON backend prototype for javadoc (Doclet 9 API).
 
-	- doclet generating json formatted javadoc
+	doclet generating json formatted javadoc
 
 # dataflow
 
-	- doctree -> ? -> json tree
+	doctree -> ? -> json tree
 
 # TODO
 
