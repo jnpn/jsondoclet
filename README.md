@@ -6,7 +6,7 @@
 
 # dataflow
 
-	doctree -> ? -> json tree
+	doctree -> Tree[javax.lang.model.Element] -> json tree
 
 # TODO
 
