@@ -7,14 +7,25 @@
   <version>0.1b-SNAPSHOT</version>
 
   <properties>
-    <!--maven.compiler.source>1.8</maven.compiler.source>
-	<maven.compiler.target>1.8</maven.compiler.target-->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.url>https://jnpn.org/jsondoclet</project.url>
+    <project.url>https://github.com/jnpn/jsondoclet</project.url>
   </properties>
 
   <build>
     <plugins>
+
+      <plugin>
+	<inherited>false</inherited>
+	<artifactId>maven-clean-plugin</artifactId>
+	<version>3.1.0</version>
+	<configuration>
+          <filesets>
+            <fileset>
+              <directory>${settings.localRepository}</directory>
+            </fileset>
+          </filesets>
+	</configuration>
+      </plugin>
 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
