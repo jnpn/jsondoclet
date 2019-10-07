@@ -1,4 +1,4 @@
-package jnpn.json;
+package jnpn.json.utils;
 
 import java.util.*;
 import jdk.javadoc.doclet.*;
@@ -23,6 +23,15 @@ public class Docer {
 	    sb.append("\n");
 	}
 	return sb.toString();
+    }
+
+    public List<String> getDoc(DocTrees trees, Element e) {
+	var doc = trees.getDocCommentTree(e);
+	if (doc == null) {
+	    return List.of();
+	} else {
+	    return List.of(doc.toString());
+	}
     }
 
     /**

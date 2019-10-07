@@ -1,4 +1,4 @@
-package jnpn.json;
+package jnpn.json.visitors;
 
 import java.util.*;
 import jdk.javadoc.doclet.*;
@@ -8,12 +8,14 @@ import javax.tools.Diagnostic.Kind;
 import com.sun.source.util.*;
 import com.sun.source.util.DocSourcePositions;
 
+import jnpn.json.utils.*;
+
 /**
- * @class JVisitor : JSON tree visitor for Doclets
+ * @class Dummy : JSON tree visitor for Doclets
  * @param x value of ....
  * @return result of ....
  */
-public class JVisitor implements ElementVisitor<Void,Void> {
+public class Dummy implements ElementVisitor<Void,Void> {
 
     /**
      * Enclosed Element count.
@@ -30,7 +32,7 @@ public class JVisitor implements ElementVisitor<Void,Void> {
     private Indenter indenter;
     private Docer docer;
 
-    public JVisitor(DocTrees trees) {
+    public Dummy(DocTrees trees) {
 	this.trees = trees;
 	this.indenter = new Indenter();
 	this.docer = new Docer();

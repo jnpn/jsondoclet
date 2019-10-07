@@ -2,38 +2,59 @@
 #
 # https://www.codejava.net/java-core/tools/using-jar-command-examples
 
-PROJET=jsondocletbis
-VERSION=0.1a
-JARDIR=jars/
-BDIR=build
-SDIR=src
-PACKAGE=jnpn.json
+VERSION=0.1b
 
-jar:	compile jardir
-	jar -cfve jars/$(PROJET)_$(VERSION).jar $(PACKAGE).JVTest -C $(BDIR) jnpn/json
+JSON=json
+JAR=jsondocletbis_$(VERSION).jar
+LIB=libs
+OUT=build
+CP=$(LIBS):$(JAR):.
 
-jardir:
-	mkdir -pv $(JARDIR)
+VERBOSE=-verbose
+
+TOP=src/jnpn/json
+SOURCE_DIRS=$(TOP)/testing/*.java $(TOP)/modelserializers/*.java $(TOP)/**/*.java
+
+META=meta-inf
+DOCLET=jnpn.json.JSONDoclet
+TEST=jnpn.json.testing.Dummy
+
+remanifest:
+	$(shell ./scripts/manifest.py)
+	@echo new manifest
+	@cat $(META)/manifest-cp.mf
+
+jar:	remanifest compile
+	@echo '-- check manifest'
+	@cat $(META)/manifest-cp.mf
+	@cat $(META)/manifest-name.mf
+	jar cfve $(JAR) $(TEST) -C $(OUT) jnpn/json
+	jar ufvm $(JAR) meta-inf/manifest-cp.mf
+	jar ufvm $(JAR) meta-inf/manifest-name.mf
 
 run:	jar
-	java -jar $(JARDIR)$(PROJET)_$(VERSION).jar
+	java -jar $(JAR)
 
 cleanbuild:
-	rm -v $(BDIR)/jnpn/json/*.class
+	-rm -rv build/jnpn/
+	-rm $(JAR)
 
-compile:	prelude
-	javac -cp $(BDIR) -d $(BDIR) $(SDIR)/jnpn/json/*
+compile:	hi
+	javac -cp $(shell ./scripts/packages.py --libs libs) -d $(OUT) $(shell ./scripts/packages.py --sources src) # $(SOURCE_DIRS) ## old version	
 
-compilev:	prelude
-	javac -verbose -cp $(BDIR) -d $(BDIR) $(SDIR)/jnpn/json/*
+compilev:	hi
+	@javac $(VERBOSE) -cp $(CP) -d $(OUT) src/jnpn/json/*
 
-test:	compile
-	java -cp $(BDIR) $(PACKAGE).JVTest
+test:	jar
+	java -cp $(shell ./scripts/packages.py --libs libs) -jar $(JAR) $(TEST)
 
-prelude:
-	@echo ""
-	@echo "make | jsondoclet (c) jnpn"
-	@echo ""
+hi:
+	@echo "make:jsondoclet"
 
 doctest: jar
-	javadoc -cp $(JARDIR)$(PROJET)_$(VERSION).jar -doclet $(PACKAGE).JSON -docletpath $(JARDIR)$(PROJET)_$(VERSION).jar $(SDIR)/jnpn/json/*.java
+	javadoc -cp $(shell ./scripts/packages.py --libs libs) -doclet $(DOCLET) -docletpath $(shell ./scripts/packages.py --libs libs):build $(shell ./scripts/packages.py --sources src)
+
+doctrees:	doctest
+	cat $(JSON)/*.json | jq '.elements | .[].DocTree' | grep -v '""'
+
+
