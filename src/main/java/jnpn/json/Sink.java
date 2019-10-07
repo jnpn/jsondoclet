@@ -9,7 +9,7 @@ import java.io.FileOutputStream;
 
 import java.nio.file.Paths;
 
-public class Sink {
+public class Sink implements ISink {
 
     String dirname = "json";
 
