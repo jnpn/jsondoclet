@@ -11,6 +11,7 @@ import javax.tools.Diagnostic.Kind;
 import com.sun.source.util.*;
 import com.sun.source.util.DocSourcePositions;
 
+import jnpn.json.alpha.Bean;
 import jnpn.json.modelserliazers.*;
 
 import com.google.gson.Gson;

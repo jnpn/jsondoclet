@@ -5,9 +5,9 @@ import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import jnpn.json.visitors.Bean;
+import jnpn.json.alpha.Bean;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
-////// com/fasterxml/jackson/databind/ObjectMapper.class
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**

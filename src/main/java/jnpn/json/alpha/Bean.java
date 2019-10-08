@@ -1,4 +1,4 @@
-package jnpn.json.visitors;
+package jnpn.json.alpha;
 
 import com.fasterxml.jackson.annotation.*;
 
