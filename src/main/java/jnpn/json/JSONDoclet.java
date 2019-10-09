@@ -22,6 +22,8 @@ import com.google.gson.JsonArray;
 
 public class JSONDoclet implements Doclet {
 
+    private Reporter reporter;
+    private Locale locale;
     @Override
     public String getName() { return "jnpn.JSON:Doclet"; }
 
@@ -34,13 +36,13 @@ public class JSONDoclet implements Doclet {
     @Override
     public boolean run(DocletEnvironment environment) {
 
-	System.out.println("---- JSON.java Doclet [JDK9 API] ----");
+	reporter.print(Kind.NOTE, "---- JSON.java Doclet [JDK9 API] ----");
 
 	showEnvironment(environment);
 
 	var trees = environment.getDocTrees();
 	if (trees == null) {
-	    System.out.println("[WARNING] NO TREES");
+	    System.err.println("[WARNING] NO TREES");
 	    return false;
 	}
 
@@ -60,20 +62,22 @@ public class JSONDoclet implements Doclet {
     }
 
     private boolean showEnvironment(DocletEnvironment environment) {
-	System.out.println(environment);
-	System.out.println(environment.getDocTrees());	// Returns an instance of the DocTrees utility class.
-	System.out.println(" - included: " + environment.getIncludedElements());	// Returns the module, package and type elements that should be included in the documentation.
-	System.out.println(environment.getModuleMode());	// Returns the required level of module documentation.
-	System.out.println(environment.getSourceVersion());	// Returns the source version of the source files that were read.
-	System.out.println(" - elements: " + environment.getSpecifiedElements());	// Returns the elements specified when the tool is invoked.
+	System.out.println("[info] " + environment);
+	System.out.println("[info] " + environment.getDocTrees());	// Returns an instance of the DocTrees utility class.
+	System.out.println("[info] " + " - included: " + environment.getIncludedElements());	// Returns the module, package and type elements that should be included in the documentation.
+	System.out.println("[info] " + environment.getModuleMode());	// Returns the required level of module documentation.
+	System.out.println("[info] " + environment.getSourceVersion());	// Returns the source version of the source files that were read.
+	System.out.println("[info] " + " - elements: " + environment.getSpecifiedElements());	// Returns the elements specified when the tool is invoked.
 	return true;
     }
     
     @Override
     public void init(Locale locale, Reporter reporter) {
-	System.out.println("doclet: " + getName());
-	System.out.println("locale: " + locale);
-	System.out.println("reporter: " + reporter);
+	this.reporter = reporter;
+	this.locale = locale;
+	System.out.println("[init] " + "doclet: " + getName());
+	System.out.println("[init] " + "locale: " + locale);
+	System.out.println("[init] " + "reporter: " + reporter);
 	reporter.print(Kind.NOTE, "> " + "...");
     }
 
