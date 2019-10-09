@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<configuration>
+  <options>
+    <option key="serializer" value="com.google.gson"/>
+    <option key="default-directory" value="./json"/>
+    <option key="logging-verbosity" value="INFO"/>
+  </options>
+  <processing stage="qa">
+    <paths>
+      <path>/data/path1</path>
+      <path>/data/otherpath</path>
+      <path>/var/log</path>
+    </paths>
+  </processing>
+</configuration>
