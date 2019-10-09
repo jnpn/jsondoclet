@@ -31,13 +31,13 @@ public class Sink implements ISink {
 	try (Writer writer = new BufferedWriter
 	     (new OutputStreamWriter
 	      (new FileOutputStream(fn), "utf-8"))) {
+	    System.err.println("[info] saving to: " + fn);
 	    writer.write(json.toString());
 	    return true;
 	}
 	catch (IOException e) {
 	    System.err.println("Error " + e.getMessage());
 	    e.printStackTrace();
-	} finally {
 	    return false;
 	}
     }
