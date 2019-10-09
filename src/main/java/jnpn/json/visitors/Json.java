@@ -100,8 +100,7 @@ public class Json implements ElementVisitor<JsonElement,Void> {
     public JsonElement visitModule(ModuleElement e, Void p) { System.out.println(""); return null; }
 
     public JsonElement visit(Element e, Void p) {
-	e.accept(this, null);
-	return basic(e);
+	return e.accept(this, null);
     }
 
     public JsonElement visitExecutable(ExecutableElement e, Void p) {
