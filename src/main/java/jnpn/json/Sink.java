@@ -11,9 +11,9 @@ import java.nio.file.Paths;
 
 public class Sink implements ISink {
 
-    String dirname = "json";
+    String dirname;
 
-    public Sink () { }
+    public Sink () { this.dirname = "json"; }
     public Sink (String dirname) { this.dirname = dirname; }
 
     private File ensureDir() {
