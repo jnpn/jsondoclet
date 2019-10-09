@@ -11,7 +11,6 @@ import javax.tools.Diagnostic.Kind;
 import com.sun.source.util.*;
 import com.sun.source.util.DocSourcePositions;
 
-import jnpn.json.alpha.Bean;
 import jnpn.json.modelserliazers.*;
 
 import com.google.gson.Gson;
@@ -19,10 +18,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonArray;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * @class Json : JSON tree visitor for Doclets
@@ -36,19 +31,6 @@ public class Json implements ElementVisitor<JsonElement,Void> {
     private String indent = "   ";
 
     public Json(DocTrees trees) {
-	try {
-	    System.out.println("---- ---- ----");
-	    Bean b0 = new Bean();
-	    System.out.println("pojo -> " + b0);
-	    var m = new ObjectMapper();
-	    String s = m.writerWithDefaultPrettyPrinter().writeValueAsString(b0);;
-	    System.out.println("json -> " + s);
-	}
-	catch (Exception e) {
-	    System.out.println("Error " + e.getMessage());
-	    e.printStackTrace();
-	}
-
 	this.trees = trees;
 	var b = new GsonBuilder();
 	// unused so far, potential infinite cycle/loop
@@ -99,15 +81,6 @@ public class Json implements ElementVisitor<JsonElement,Void> {
     }
 
     public JsonElement visitExecutable(ExecutableElement e, Void p) {
-	// try {
-	//     var m = new ObjectMapper();
-	//     String s = m.writerWithDefaultPrettyPrinter().writeValueAsString(e);;
-	//     System.out.println("json -> " + s);
-	// }
-	// catch (JsonProcessingException j) {
-	//     System.out.println("Error " + j.getMessage());
-	//     j.printStackTrace();
-	// }
 	return basic(e);
     }
 
