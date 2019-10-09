@@ -12,12 +12,13 @@ import com.sun.source.doctree.DocTree;
 import com.sun.source.util.DocTrees;
 import com.sun.source.util.DocSourcePositions;
 
+import jnpn.json.visitors.Json;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonArray;
 
-import jnpn.json.visitors.Json;
 
 public class JSONDoclet implements Doclet {
 
