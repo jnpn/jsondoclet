@@ -15,6 +15,16 @@
 	define a clear mapping from POJO metaclasses to Json Objects
   - tests
 	obviously
+  - configuration file :DONE
+	use java Properties to load configuration from config.properties jar resource
+  - overridable configuration file
+  - configurable pojo : json mapping
+	metamodel description to json object
+
+	```
+		Element.name -> [name]
+		...
+	```
   - Redis endpoint
 	LSP oriented javadoc server, so your IDE can query documentation
 
