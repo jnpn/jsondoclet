@@ -86,6 +86,22 @@
 	</executions>
       </plugin>
 
+      <plugin>
+	<groupId>org.apache.maven.plugins</groupId>
+	<artifactId>maven-javadoc-plugin</artifactId>
+	<configuration>
+	  <doclet>jnpn.json.JSONDoclet</doclet>
+	  <docletArtifact>
+	    <groupId>jnpn.json</groupId>
+	    <artifactId>jsondoclet</artifactId>
+	    <version>0.1b-SNAPSHOT</version>
+	    <!--groupId>my.artifact.group</groupId-->
+	    <!--artifactId>my.artifact.id</artifactId-->
+	    <!--version>my.artifact.version</version-->
+	  </docletArtifact>
+	</configuration>
+      </plugin>
+
     </plugins>
   </build>
 
