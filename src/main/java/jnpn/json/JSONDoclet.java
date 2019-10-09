@@ -12,6 +12,7 @@ import com.sun.source.doctree.DocTree;
 import com.sun.source.util.DocTrees;
 import com.sun.source.util.DocSourcePositions;
 
+import jnpn.json.utils.Parents;
 import jnpn.json.visitors.Json;
 
 import com.google.gson.Gson;
@@ -19,11 +20,13 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonArray;
 
-
 public class JSONDoclet implements Doclet {
 
     private Reporter reporter;
     private Locale locale;
+    private Properties props;
+    private String configFile = "/custom/config.properties";
+
     @Override
     public String getName() { return "jnpn.JSON:Doclet"; }
 
@@ -47,17 +50,28 @@ public class JSONDoclet implements Doclet {
 	}
 
 	var elems = environment.getSpecifiedElements();
-	var gson = new GsonBuilder().setPrettyPrinting().create();
-	var sink = new Sink(); // "json" is default
+	var out = props.getProperty("config.outputdir", "json");
+	System.out.println("using config " + out);
+	var sink = new Sink(out);
+
+	reporter.print(Kind.NOTE, "using sink: " + sink);
 
 	for (Element e : elems) {
-	    System.out.println("--- " + e);
 	    var res = new Json(trees).visit(e, null);
-	    var js = gson.toJson(res);
-	    var fn = e.getSimpleName().toString();
-	    System.err.println(js);
-	    sink.save(fn, js);
+	    var fullname = Parents.lineage(e)
+		.stream()
+		.map((el) -> el.getSimpleName().toString())
+		.reduce("doc", (a, b) -> a + ":" + b);
+	    var saved = sink.save(fullname, res.toString());
+	    if (saved) {
+		System.err.println("[info] done");
+		// reporter.print(Kind.OTHER, e, "done.");
+	    } else {
+		System.err.println("[info] failed to save...");
+		// reporter.print(Kind.WARNING, e, "done.");
+	    }
 	}
+
 	return true;
     }
 
@@ -70,7 +84,7 @@ public class JSONDoclet implements Doclet {
 	System.out.println("[info] " + " - elements: " + environment.getSpecifiedElements());	// Returns the elements specified when the tool is invoked.
 	return true;
     }
-    
+
     @Override
     public void init(Locale locale, Reporter reporter) {
 	this.reporter = reporter;
@@ -79,6 +93,29 @@ public class JSONDoclet implements Doclet {
 	System.out.println("[init] " + "locale: " + locale);
 	System.out.println("[init] " + "reporter: " + reporter);
 	reporter.print(Kind.NOTE, "> " + "...");
+
+	props = conf(configFile);
+
+    }
+
+    private Properties conf(String filename) {
+
+	Properties p = new Properties();
+	try {
+	    var s = this.getClass().getResourceAsStream(filename);
+	    if (s != null) {
+		p.load(s);
+		System.err.println("[info] properties: " + p);
+	    } else {
+		System.err.println("[error] path " + filename + " not found.");
+	    }
+	}
+	catch (Throwable e) {
+	    System.out.println("Error " + e.getMessage());
+	    e.printStackTrace();
+	}
+	return p;
+
     }
 
 }
