@@ -47,6 +47,37 @@ public class Json implements ElementVisitor<JsonElement,Void> {
 	root = b.create();
     }
 
+    /**
+     * Iterable<T> -> Function<T, JsonElement> -> JsonArray
+     *
+     * JsonElement := JsonObject | JsonArray | JsonNull | JsonPrimitive(Char, String, Integer, Bool)
+     *
+     */
+    private <T,U extends JsonElement> JsonArray listify(Iterable<T> l, Function<T, U> f) {
+	var a = new JsonArray();
+	for(T t: l) { a.add(f.apply(t)); };
+	return a;
+    }
+
+    private <T> JsonArray listify(Iterable<T> l) {
+	var a = new JsonArray();
+	for (T t: l) { a.add(t.toString()); }
+	return a;
+    }
+
+    /**
+     * basic :: javax.lang.model.Element -> JsonElement
+     * returns a JsonObject with some metadata about it
+     *  - name
+     *  - kind
+     *  - doc
+     *  - annotations
+     *  - modifiers
+     *  - children?
+     *
+     * @param e: Element
+     * @return JsonElement
+     */
     private JsonElement basic(Element e) {
 	var j = new JsonObject();
 	j.addProperty("name", e.getClass().getName().toString());
@@ -54,21 +85,14 @@ public class Json implements ElementVisitor<JsonElement,Void> {
 	j.addProperty("enclosingelement", e.getEnclosingElement​().toString());
 	j.addProperty("kind", e.getKind​().toString());
 
-	var jm = new JsonArray();
-	e.getModifiers().stream().forEach((m) -> jm.add(m.toString()));
-	j.add("modifiers", jm);
-
-	var ja = new JsonArray();
-	e.getAnnotationMirrors().stream().forEach((a) -> ja.add(a.toString()));
-	j.add("annotations", ja);
-
 	var doc = trees.getDocCommentTree(e);
 	var lines = (doc != null) ? doc.getFullBody().toString() : "";
 	j.addProperty("DocTree", lines);
 
-	var children = new JsonArray();
-	e.getEnclosedElements().forEach((en) -> children.add(en.accept(this, null)));
+	j.add("modifiers", listify(e.getModifiers()));
+	j.add("annotations", listify(e.getAnnotationMirrors()));
 
+	var children = listify(e.getEnclosedElements(), (en) -> en.accept(this, null));
 	j.add("elements", children);
 	return j;
     }
