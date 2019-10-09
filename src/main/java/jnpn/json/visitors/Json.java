@@ -26,8 +26,12 @@ import com.google.gson.JsonArray;
  */
 public class Json implements ElementVisitor<JsonElement,Void> {
 
+    @Deprecated
     private Gson root;
+
     private DocTrees trees;
+
+    @Deprecated
     private String indent = "   ";
 
     public Json(DocTrees trees) {
