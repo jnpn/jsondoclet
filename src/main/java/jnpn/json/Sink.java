@@ -42,4 +42,8 @@ public class Sink implements ISink {
 	}
     }
 
+    public String toString() {
+	return "Default Sink(dir:" + dirname + ").";
+    }
+
 }
