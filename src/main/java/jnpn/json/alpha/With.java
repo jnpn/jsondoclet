@@ -1,15 +1,14 @@
 package jnpn.json.alpha;
 
-import java.util.function.*;
+import java.util.function.Function;
 
 /**
  * mimicking python Contexts
  * With <object> as <name>: <block>
  * ==
  * (<name> -> <block>.apply(<name>)).apply(<object>)
- *
  **/
-public class With<R,T> {
+public class With<R, T> {
 
     /**
      * field r: resource
@@ -27,23 +26,23 @@ public class With<R,T> {
      * main constructor (IResource, IResource -> T)
      **/
     public With(IResource<R> r, Function<IResource<R>, T> f) {
-	this.r = r;
-	this.f = f;
+        this.r = r;
+        this.f = f;
     }
 
     /**
      * main method apply:
-     *  - open resource
-     *  - apply thunk yield r
-     *  - close resource
+     * - open resource
+     * - apply thunk yield r
+     * - close resource
      **/
     @Deprecated
     @SuppressWarnings("deprecation")
     public T apply() {
-	r.open();
-	var t = f.apply(r);
-	var s = r.close();
-	return t;
+        r.open();
+        var t = f.apply(r);
+        var s = r.close();
+        return t;
     }
 
 }

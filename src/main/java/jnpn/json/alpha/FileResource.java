@@ -3,8 +3,8 @@ package jnpn.json.alpha;
 import java.io.File;
 
 /**
- * @class FileResource
  * @param x value of ....
+ * @class FileResource
  * @return result of ....
  */
 public class FileResource implements IResource<File> {
@@ -15,17 +15,18 @@ public class FileResource implements IResource<File> {
      * @return result of ....
      */
     private File f;
+
     public FileResource(File f) {
-	this.f = f;
+        this.f = f;
     }
 
     public void open() {
-	// this.f.open();
-	return;
+        // this.f.open();
+        return;
     }
 
     public File close() {
-	// this.f.close();
-	return this.f;
+        // this.f.close();
+        return this.f;
     }
 }
