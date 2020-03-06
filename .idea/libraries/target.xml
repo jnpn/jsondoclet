@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="target">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/target/jsondoclet-0.1b-SNAPSHOT.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/original-jsondoclet-0.1b-SNAPSHOT.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
