@@ -4,6 +4,22 @@
 
 	doclet generating json formatted javadoc
 
+# usage
+
+  - assuming ./target contains the doclet jar
+  - and src/main/java/ is the root of java source files
+
+  ```
+  javadoc -cp target/jsondoclet-0.1b-SNAPSHOT.jar\
+          -docletpath target/jsondoclet-0.1b-SNAPSHOT.jar\
+	  -doclet jnpn.json.JSONDoclet\
+	  src/main/java/jnpn/json/*.java
+  ```
+
+  produces json output into jsondocs
+  - edit src/main/resources/custom/config.properties to customize output-dir name
+
+
 # dataflow
 
 	doctree -> Tree[javax.lang.model.Element] -> json tree
