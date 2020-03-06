@@ -1,4 +1,4 @@
-package jnpn.json.testing;
+package jnpn.json;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @class Dummy: jar main class to test classpath issues
  **/
-public class Dummy {
+public class JSONDocletMain {
     public static void main(String[] args) {
         // var v = new JVisitor();
         System.out.println("jsondoclet-bis (c) jnpn 2019-");
